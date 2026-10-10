@@ -27,7 +27,7 @@
   <div class="side-note"><strong><span class="dot"></span>Your money, your choices</strong>Small, clear steps can help you understand where your money goes and plan what comes next.</div>
 </aside>
 <main class="main">
-<div class="quote-banner" role="note"><span class="quote-mark">“</span><span><strong>An investment in knowledge pays the best interest.</strong><small>— Benjamin Franklin</small></span></div>
+<div class="quote-banner" role="note" aria-live="polite"><span class="quote-mark">“</span><span><strong id="dailyQuote">An investment in knowledge pays the best interest.</strong><small id="quoteAuthor">— Benjamin Franklin</small></span></div>
 <header class="topbar"><div><div class="eyebrow">YOUR PERSONAL MONEY SPACE</div><div class="top-title" id="topTitle">Overview</div></div><div class="profile"><div class="avatar">M</div><span class="profile-text">My MoneyMind</span></div></header>
 <div class="content">
 <section class="section active" id="page-dashboard">
@@ -117,6 +117,24 @@
 <div class="toast" id="toast" role="status"></div>
 <script>
 const $=id=>document.getElementById(id);
+const inspirationQuotes=[
+{quote:"An investment in knowledge pays the best interest.",author:"Benjamin Franklin"},
+{quote:"The secret of getting ahead is getting started.",author:"Mark Twain"},
+{quote:"It is not the man who has too little, but the man who craves more, that is poor.",author:"Seneca"},
+{quote:"Beware of little expenses; a small leak will sink a great ship.",author:"Benjamin Franklin"},
+{quote:"Do not save what is left after spending, but spend what is left after saving.",author:"Often attributed to Warren Buffett"},
+{quote:"The future depends on what you do today.",author:"Mahatma Gandhi"},
+{quote:"An investment in yourself pays the best dividends.",author:"Inspired by Benjamin Franklin"},
+{quote:"Opportunities don't happen. You create them.",author:"Chris Grosser"},
+{quote:"A big part of financial freedom is having your heart and mind free from worry about the what-ifs of life.",author:"Suze Orman"},
+{quote:"Small disciplines repeated with consistency every day lead to great achievements.",author:"John C. Maxwell"},
+{quote:"Formal education will make you a living; self-education will make you a fortune.",author:"Often attributed to Jim Rohn"},
+{quote:"The goal isn't more money. The goal is living life on your terms.",author:"Chris Brogan"}
+];
+let quoteIndex=0;
+function showInspirationQuote(){const q=inspirationQuotes[quoteIndex];const quoteEl=document.getElementById('dailyQuote');const authorEl=document.getElementById('quoteAuthor');if(quoteEl&&authorEl){quoteEl.textContent=q.quote;authorEl.textContent='— '+q.author}quoteIndex=(quoteIndex+1)%inspirationQuotes.length}
+showInspirationQuote();
+setInterval(showInspirationQuote,300000);
 function setTheme(theme,notify=false){const dark=theme==='dark';document.body.classList.toggle('dark',dark);try{localStorage.setItem('moneymind_theme',dark?'dark':'light')}catch(e){};const light=$('lightTheme'),darkBtn=$('darkTheme');if(light&&darkBtn){light.classList.toggle('selected',!dark);darkBtn.classList.toggle('selected',dark);light.setAttribute('aria-pressed',String(!dark));darkBtn.setAttribute('aria-pressed',String(dark));$('themeStatus').textContent=dark?'Dark mode is on. Your choice is saved in this browser.':'Light mode is on. Your choice is saved in this browser.'}if(notify)toast((dark?'Dark':'Light')+' mode enabled') }
 let initialTheme='light';try{initialTheme=localStorage.getItem('moneymind_theme')==='dark'?'dark':'light'}catch(e){};
 const money=n=>new Intl.NumberFormat('en-NG',{style:'currency',currency:'NGN',maximumFractionDigits:0}).format(Number(n)||0);
