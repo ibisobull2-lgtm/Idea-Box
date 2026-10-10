@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MoneyMind</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #172b4d;
+    }
+    header {
+      background: #102a43;
+      color: white;
+      padding: 22px 8%;
+    }
+    main {
+      max-width: 850px;
+      margin: 60px auto;
+      padding: 20px;
+    }
+    .hero {
+      background: white;
+      padding: 35px;
+      border-radius: 18px;
+    }
+    h1 { font-size: 42px; }
+    .green { color: #159570; }
+    button {
+      background: #159570;
+      color: white;
+      padding: 13px 22px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <strong>💡 MoneyMind</strong>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="green">YOUR MONEY. YOUR FUTURE.</p>
+      <h1>Welcome to <span class="green">MoneyMind.</span></h1>
+      <p>Your smart space to manage money, explore business ideas,
+      and plan for the future.</p>
+      <button onclick="alert('Welcome to MoneyMind!')">
+        Get Started
+      </button>
+    </section>
+  </main>
+</body>
+</html>
