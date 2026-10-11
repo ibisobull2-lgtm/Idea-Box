@@ -27,7 +27,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-se
 @media(max-width:800px){.plan-grid{grid-template-columns:1fr;max-width:480px}.welcome-hero{padding-top:60px;padding-bottom:65px}.welcome-copy h1{letter-spacing:-1.5px}.welcome-bottom{font-size:10px}}
 @media(max-width:1000px){.app{grid-template-columns:205px minmax(0,1fr)}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.content{padding:24px 20px}.topbar{padding:0 20px}.layout{grid-template-columns:1fr}.feature-cards{grid-template-columns:1fr}}
 @media(max-width:650px){.quote-banner{padding:11px 16px}.quote-banner strong{font-size:12px}.app{display:block}.sidebar{padding:12px;gap:12px;position:sticky;top:0;z-index:5}.brand{padding:2px 4px}.side-note,.nav-label{display:none}.nav{display:flex;overflow-x:auto;gap:5px}.nav button{white-space:nowrap;padding:9px 11px;font-size:11px}.nav .ico{display:none}.topbar{height:58px;padding:0 16px}.content{padding:20px 13px 35px}.welcome{align-items:flex-start;flex-direction:column}.welcome h1{font-size:24px}.date-pill{display:none}.stats{gap:10px}.card{padding:15px}.stat-value{font-size:21px}.stat-head{font-size:10px}.stat-icon{width:29px;height:29px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.profile .profile-text{display:none}}
-</style>
+.auth-screen,.plans-screen{position:fixed;inset:0;z-index:1000;overflow-y:auto;width:100%;height:100%;}#trialScreen{background:linear-gradient(140deg,#07172c,#102d48)}#authScreen,#plansScreen{background:linear-gradient(140deg,#07172c,#102d48)}</style>
 </head>
 <body>
 <div id="welcomeScreen" class="welcome-screen">
@@ -163,7 +163,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-se
 <script>
 const $=id=>document.getElementById(id);
 const welcomeScreen=$('welcomeScreen'),authScreen=$('authScreen'),trialScreen=$('trialScreen'),plansScreen=$('plansScreen'),appScreen=document.querySelector('.app');
-function showGate(which){welcomeScreen.hidden=which!=='welcome';authScreen.hidden=which!=='auth';trialScreen.hidden=which!=='trial';plansScreen.hidden=which!=='plans';appScreen.style.display=which==='app'?'':'none';window.scrollTo(0,0)}
+function showGate(which){welcomeScreen.hidden=which!=='welcome';authScreen.hidden=which!=='auth';trialScreen.hidden=which!=='trial';plansScreen.hidden=which!=='plans';appScreen.style.display=which==='app'?'':'none';document.documentElement.style.overflow=(which==='welcome'||which==='app')?'':'hidden';window.scrollTo({top:0,left:0,behavior:'instant'});const active=which==='trial'?trialScreen:which==='auth'?authScreen:which==='plans'?plansScreen:which==='welcome'?welcomeScreen:appScreen;if(active&&active.scrollTo)active.scrollTo({top:0,left:0,behavior:'instant'});}
 showGate('welcome');
 function openAuth(plan='Sign in'){showGate('auth');$('authHeading').textContent=plan==='Sign in'?'Sign in to MoneyMind':'Continue with '+plan;$('authDescription').textContent=plan==='Sign in'?'Welcome back. Secure sign-in is not activated in this preview yet.':'You selected '+plan+'. Account creation and payments are not active in this preview.';$('authSubmit').textContent=plan==='Sign in'?'Sign in':'Continue';}
 $('startTrial').addEventListener('click',()=>showGate('trial'));
