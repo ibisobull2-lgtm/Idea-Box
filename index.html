@@ -8,7 +8,7 @@
 <title>MoneyMind — Make your money make sense</title>
 <style>
 :root{--navy:#101c3a;--navy2:#1a2b50;--green:#31d0a0;--green2:#d9fff1;--bg:#f5f7fb;--ink:#17233f;--muted:#77819a;--line:#e7ebf2;--white:#fff;--red:#e66a78;--gold:#f1b95c;--shadow:0 12px 34px rgba(22,38,73,.07)}
-*{box-sizing:border-box}
+*{box-sizing:border-box}[hidden]{display:none!important}
 .welcome-screen{min-height:100vh;position:relative;isolation:isolate;overflow:hidden;background:#06172b;color:#fff;display:flex;flex-direction:column}
 .welcome-backdrop{position:absolute;inset:0;z-index:-2;background-image:linear-gradient(90deg,rgba(3,15,31,.92) 0%,rgba(4,22,41,.78) 48%,rgba(3,15,31,.43) 100%),url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=2000&q=85');background-position:center;background-size:cover}
 .welcome-screen:after{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 72% 50%,rgba(24,190,160,.14),transparent 45%)}
@@ -46,6 +46,9 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-se
 </div>
 <div id="authScreen" class="auth-screen" hidden>
   <div class="auth-card"><button class="auth-back" id="backWelcome">← Back</button><div class="brand"><div class="logo">M</div><span>Money<em>Mind</em></span></div><h2 id="authHeading">Create your MoneyMind account</h2><p id="authDescription">Start with a one-month free trial. This prototype does not yet create a secure online account.</p><form id="authForm"><label class="field">Email address<input id="authEmail" type="email" placeholder="you@example.com" required></label><label class="field">Password<input id="authPassword" type="password" minlength="8" placeholder="At least 8 characters" required></label><button class="btn green" type="submit" id="authSubmit">Continue</button></form><p class="auth-note">Demo only: account details are not sent to a server. Do not use a real password here.</p></div>
+</div>
+<div id="trialScreen" class="auth-screen" hidden>
+  <div class="auth-card"><button class="auth-back" id="backTrial">← Back to welcome page</button><div class="brand"><div class="logo">M</div><span>Money<em>Mind</em></span></div><div class="welcome-kicker" style="margin-top:24px;color:#0c9974"><span class="welcome-dot"></span> ONE MONTH ON US</div><h2>Create your free-trial account</h2><p>Get started with MoneyMind and explore the tools before choosing a paid plan.</p><form id="trialForm"><label class="field">Your name<input id="trialName" type="text" placeholder="Enter your name" required></label><label class="field">Email address<input id="trialEmail" type="email" placeholder="you@example.com" required></label><label class="field">Create a password<input id="trialPassword" type="password" minlength="8" placeholder="At least 8 characters" required></label><label style="display:flex;gap:9px;align-items:flex-start;font-size:12px;line-height:1.5;color:#536079"><input id="trialTerms" type="checkbox" required style="margin-top:3px">I understand this is a website preview and my trial will not be activated until secure account and billing services are connected.</label><button class="btn green" type="submit">Create trial account</button></form><p class="auth-note">Preview only: this form does not save or send your details. Do not enter a real password.</p></div>
 </div>
 <div id="plansScreen" class="plans-screen" hidden>
   <div class="plans-head"><button class="auth-back" id="backPlans">← Back</button><div class="welcome-kicker"><span class="welcome-dot"></span> CHOOSE YOUR PLAN</div><h1>A plan for your next step.</h1><p>Start free, then choose the tools that fit your goals.</p></div>
@@ -159,17 +162,19 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-se
 <div class="toast" id="toast" role="status"></div>
 <script>
 const $=id=>document.getElementById(id);
-const welcomeScreen=$('welcomeScreen'),authScreen=$('authScreen'),plansScreen=$('plansScreen'),appScreen=document.querySelector('.app');
-function showGate(which){welcomeScreen.hidden=which!=='welcome';authScreen.hidden=which!=='auth';plansScreen.hidden=which!=='plans';appScreen.style.display=which==='app'?'':'none';window.scrollTo(0,0)}
+const welcomeScreen=$('welcomeScreen'),authScreen=$('authScreen'),trialScreen=$('trialScreen'),plansScreen=$('plansScreen'),appScreen=document.querySelector('.app');
+function showGate(which){welcomeScreen.hidden=which!=='welcome';authScreen.hidden=which!=='auth';trialScreen.hidden=which!=='trial';plansScreen.hidden=which!=='plans';appScreen.style.display=which==='app'?'':'none';window.scrollTo(0,0)}
 showGate('welcome');
-function openAuth(plan='Free Trial'){showGate('auth');$('authHeading').textContent=plan==='Free Trial'?'Create your MoneyMind account':('Continue with '+plan);$('authDescription').textContent=plan==='Free Trial'?'Start with a one-month free trial. This prototype does not yet create a secure online account.':'You selected '+plan+'. Account creation and payments are not active in this prototype.';$('authSubmit').textContent=plan==='Free Trial'?'Start free trial':'Continue';}
-$('startTrial').addEventListener('click',()=>openAuth('Free Trial'));
+function openAuth(plan='Sign in'){showGate('auth');$('authHeading').textContent=plan==='Sign in'?'Sign in to MoneyMind':'Continue with '+plan;$('authDescription').textContent=plan==='Sign in'?'Welcome back. Secure sign-in is not activated in this preview yet.':'You selected '+plan+'. Account creation and payments are not active in this preview.';$('authSubmit').textContent=plan==='Sign in'?'Sign in':'Continue';}
+$('startTrial').addEventListener('click',()=>showGate('trial'));
 $('welcomeSignIn').addEventListener('click',()=>openAuth('Sign in'));
 $('explorePlans').addEventListener('click',()=>showGate('plans'));
 $('backWelcome').addEventListener('click',()=>showGate('welcome'));
+$('backTrial').addEventListener('click',()=>showGate('welcome'));
 $('backPlans').addEventListener('click',()=>showGate('welcome'));
 document.querySelectorAll('.plan-select').forEach(b=>b.addEventListener('click',()=>openAuth(b.dataset.plan)));
-$('authForm').addEventListener('submit',e=>{e.preventDefault();alert('This is a visual prototype only. Secure sign-in, trial activation, subscriptions, and bank connections must be set up before using real account details.');});
+$('authForm').addEventListener('submit',e=>{e.preventDefault();alert('Sign-in is not connected to a secure account service yet. This preview does not send or save your details.');});
+$('trialForm').addEventListener('submit',e=>{e.preventDefault();alert('Thanks for trying MoneyMind! The trial cannot be activated until secure account registration and billing are connected. No details have been sent or saved.');});
 
 const inspirationQuotes=[
 {quote:"An investment in knowledge pays the best interest.",author:"Benjamin Franklin"},
