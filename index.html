@@ -197,7 +197,7 @@ const inspirationQuotes=[
 let quoteIndex=0;
 function showInspirationQuote(){const q=inspirationQuotes[quoteIndex];const quoteEl=document.getElementById('dailyQuote');const authorEl=document.getElementById('quoteAuthor');if(quoteEl&&authorEl){quoteEl.textContent=q.quote;authorEl.textContent='— '+q.author}quoteIndex=(quoteIndex+1)%inspirationQuotes.length}
 showInspirationQuote();
-setInterval(showInspirationQuote,300000);
+setInterval(showInspirationQuote,120000);
 function setTheme(theme,notify=false){const dark=theme==='dark';document.body.classList.toggle('dark',dark);try{localStorage.setItem('moneymind_theme',dark?'dark':'light')}catch(e){};const light=$('lightTheme'),darkBtn=$('darkTheme');if(light&&darkBtn){light.classList.toggle('selected',!dark);darkBtn.classList.toggle('selected',dark);light.setAttribute('aria-pressed',String(!dark));darkBtn.setAttribute('aria-pressed',String(dark));$('themeStatus').textContent=dark?'Dark mode is on. Your choice is saved in this browser.':'Light mode is on. Your choice is saved in this browser.'}if(notify)toast((dark?'Dark':'Light')+' mode enabled') }
 let initialTheme='light';try{initialTheme=localStorage.getItem('moneymind_theme')==='dark'?'dark':'light'}catch(e){};
 const money=n=>new Intl.NumberFormat('en-NG',{style:'currency',currency:'NGN',maximumFractionDigits:0}).format(Number(n)||0);
