@@ -164,7 +164,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-se
 const $=id=>document.getElementById(id);
 const welcomeScreen=$('welcomeScreen'),authScreen=$('authScreen'),trialScreen=$('trialScreen'),plansScreen=$('plansScreen'),appScreen=document.querySelector('.app');
 function showGate(which){welcomeScreen.hidden=which!=='welcome';authScreen.hidden=which!=='auth';trialScreen.hidden=which!=='trial';plansScreen.hidden=which!=='plans';appScreen.style.display=which==='app'?'':'none';document.documentElement.style.overflow=(which==='welcome'||which==='app')?'':'hidden';window.scrollTo({top:0,left:0,behavior:'instant'});const active=which==='trial'?trialScreen:which==='auth'?authScreen:which==='plans'?plansScreen:which==='welcome'?welcomeScreen:appScreen;if(active&&active.scrollTo)active.scrollTo({top:0,left:0,behavior:'instant'});}
-showGate('welcome');
+showGate('app');showPage('dashboard');
 function openAuth(plan='Sign in'){showGate('auth');$('authHeading').textContent=plan==='Sign in'?'Sign in to MoneyMind':'Continue with '+plan;$('authDescription').textContent=plan==='Sign in'?'Welcome back. Secure sign-in is not activated in this preview yet.':'You selected '+plan+'. Account creation and payments are not active in this preview.';$('authSubmit').textContent=plan==='Sign in'?'Sign in':'Continue';}
 $('startTrial').addEventListener('click',()=>showGate('trial'));
 $('welcomeSignIn').addEventListener('click',()=>openAuth('Sign in'));
