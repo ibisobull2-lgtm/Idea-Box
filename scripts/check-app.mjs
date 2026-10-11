@@ -14,13 +14,13 @@ assert(duplicates.length === 0, `Duplicate HTML IDs: ${[...new Set(duplicates)].
 
 for (const id of [
   'ideaForm', 'ideaName', 'ideaDesc', 'ideaCustomer', 'ideaPrice',
-  'ideaCost', 'ideaStartup', 'ideaSales', 'ideaMonths', 'ideaMonthlyCosts',
+  'ideaCost', 'ideaStartup', 'ideaSales', 'ideaMonths', 'ideaMonthlyCosts',\n  'ideaValidation', 'ideaCompetitors', 'ideaDifference', 'ideaAcquisition', 'ideaRisks',
   'exportData', 'importDataButton', 'importDataFile', 'clearData',
   'moneymind_transactions'
 ]) assert(html.includes(id), `Expected app feature/reference missing: ${id}`);
 
 assert(/PLANNING READINESS SCORE/.test(html), 'Analyzer must label its score as planning readiness.');
-assert(/does not measure real market demand or predict success/i.test(html), 'Analyzer must explain the score limitation.');
+assert(/does not independently verify your research/i.test(html), 'Analyzer must explain that research is not independently verified.');\nassert(/Market-readiness checklist/.test(html), 'Market readiness checklist is missing.');\nassert(/Customer validation so far/.test(html), 'Customer validation input is missing.');
 assert(/not synced to an online account/i.test(html), 'Local-only data disclosure is missing.');
 assert(/schemaVersion:\s*1/.test(html), 'Backup schema version is missing.');
 assert(/data\.app\s*!==\s*'MoneyMind'/.test(html), 'Backup import must validate the app marker.');
