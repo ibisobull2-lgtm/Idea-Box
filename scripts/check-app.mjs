@@ -20,7 +20,7 @@ for (const id of [
 ]) assert(html.includes(id), `Expected app feature/reference missing: ${id}`);
 
 assert(/PLANNING READINESS SCORE/.test(html), 'Analyzer must label its score as planning readiness.');
-assert(/not a probability of business success/i.test(html), 'Analyzer must explain the score limitation.');
+assert(/does not measure real market demand or predict success/i.test(html), 'Analyzer must explain the score limitation.');
 assert(/not synced to an online account/i.test(html), 'Local-only data disclosure is missing.');
 assert(/schemaVersion:\s*1/.test(html), 'Backup schema version is missing.');
 assert(/data\.app\s*!==\s*'MoneyMind'/.test(html), 'Backup import must validate the app marker.');
