@@ -161,6 +161,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-se
 const $=id=>document.getElementById(id);
 const welcomeScreen=$('welcomeScreen'),authScreen=$('authScreen'),plansScreen=$('plansScreen'),appScreen=document.querySelector('.app');
 function showGate(which){welcomeScreen.hidden=which!=='welcome';authScreen.hidden=which!=='auth';plansScreen.hidden=which!=='plans';appScreen.style.display=which==='app'?'':'none';window.scrollTo(0,0)}
+showGate('welcome');
 function openAuth(plan='Free Trial'){showGate('auth');$('authHeading').textContent=plan==='Free Trial'?'Create your MoneyMind account':('Continue with '+plan);$('authDescription').textContent=plan==='Free Trial'?'Start with a one-month free trial. This prototype does not yet create a secure online account.':'You selected '+plan+'. Account creation and payments are not active in this prototype.';$('authSubmit').textContent=plan==='Free Trial'?'Start free trial':'Continue';}
 $('startTrial').addEventListener('click',()=>openAuth('Free Trial'));
 $('welcomeSignIn').addEventListener('click',()=>openAuth('Sign in'));
