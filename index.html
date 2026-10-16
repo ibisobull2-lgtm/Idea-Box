@@ -7,7 +7,7 @@
 <meta name="description" content="MoneyMind helps you track money, explore business ideas, and plan your next financial move.">
 <title>MoneyMind — Make your money make sense</title>
 <style>
-:root{--navy:#101c3a;--navy2:#1a2b50;--green:#31d0a0;--green2:#d9fff1;--bg:#f5f7fb;--ink:#17233f;--muted:#77819a;--line:#e7ebf2;--white:#fff;--red:#e66a78;--gold:#f1b95c;--shadow:0 12px 34px rgba(22,38,73,.07)}
+:root{--navy:#243b68;--navy2:#34548a;--green:#31bfa0;--green2:#d9f7ee;--bg:#edf6ff;--ink:#1c3153;--muted:#7185a2;--line:#d9e8f8;--white:#fff;--red:#e66a78;--gold:#f1b95c;--shadow:0 12px 34px rgba(41,83,135,.09)}
 *{box-sizing:border-box}[hidden]{display:none!important}
 .welcome-screen{min-height:100vh;position:relative;isolation:isolate;overflow:hidden;background:#06172b;color:#fff;display:flex;flex-direction:column}
 .welcome-backdrop{position:absolute;inset:0;z-index:-2;background-image:linear-gradient(90deg,rgba(3,15,31,.92) 0%,rgba(4,22,41,.78) 48%,rgba(3,15,31,.43) 100%),url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=2000&q=85');background-position:center;background-size:cover}
@@ -74,6 +74,45 @@ body.dark .logo{background:#d9fff0;color:#078956}
 body.dark .card,body.dark .feature{background:var(--white);border-color:var(--line)}
 body.dark .stat-icon,body.dark .tx-icon{background:#20364a;color:#a6f4d9}
 @media(max-width:650px){.sidebar{background:#0d2140}.nav button.active,.nav button:hover{background:#203a60}}
+
+/* User-selected palette: light blue light mode and dark purple dark mode */
+body{background:#edf6ff;color:#1c3153}
+.sidebar{background:#34205d}
+.brand span em{color:#6bdbbd}
+.logo{background:#e2f1ff;color:#4a6fa9}
+.topbar{background:#fff;border-bottom-color:#d9e8f8}
+.card,.feature{border-color:#d9e8f8}
+.nav button.active,.nav button:hover{background:#503780;color:#fff}
+.side-note{background:#3e2868;border-color:#5a4380}
+.quote-banner{background:linear-gradient(100deg,#34205d,#503780)}
+.stat-icon{background:#e1f0ff;color:#3568a6}
+.btn.green{background:#20a97d;color:#fff}
+.fill{background:#45a7e8}
+.feature .big{color:#477fca}
+.welcome-screen{background:#edf6ff;color:#1c3153}
+.welcome-backdrop{background-image:radial-gradient(ellipse at 76% 32%,rgba(49,170,220,.13),transparent 42%),linear-gradient(115deg,#ffffff 0%,#f2f8ff 58%,#e6f3ff 100%)}
+.welcome-copy h1{color:#1c3153}
+.welcome-copy h1 span{color:#268dca}
+.welcome-kicker{color:#2676a8}
+.welcome-bottom{background:#34205d;color:#e6e0f5}
+body.dark{--navy:#21143d;--navy2:#322052;--bg:#171026;--ink:#f1eaff;--muted:#b9abcF;--line:#3e2d59;--white:#25183d;--shadow:0 12px 34px rgba(0,0,0,.28);background:#171026;color:#f1eaff}
+body.dark .sidebar{background:#21143d}
+body.dark .topbar,body.dark .card,body.dark .feature{background:#25183d;color:#f1eaff;border-color:#3e2d59}
+body.dark .nav button{color:#d0c2e8}
+body.dark .nav button.active,body.dark .nav button:hover{background:#49316c;color:#fff}
+body.dark .side-note{background:#2d1d49;border-color:#49316c}
+body.dark .quote-banner{background:linear-gradient(100deg,#21143d,#3a245b)}
+body.dark .stat-icon,body.dark .tx-icon{background:#392653;color:#c4a8ff}
+body.dark .select,body.dark .field input,body.dark .field select,body.dark .field textarea,body.dark .btn.outline{background:#211633;color:#f1eaff;border-color:#49365f}
+body.dark .welcome-screen{background:#171026;color:#f1eaff}
+body.dark .welcome-backdrop{background-image:radial-gradient(ellipse at 76% 32%,rgba(133,87,205,.18),transparent 42%),linear-gradient(115deg,#1a112b 0%,#211538 58%,#2b1b43 100%)}
+body.dark .welcome-nav{border-bottom-color:#3e2d59}
+body.dark .welcome-nav .brand,body.dark .welcome-copy h1{color:#f1eaff}
+body.dark .welcome-copy h1 span{color:#bd9aff}
+body.dark .welcome-copy>p,body.dark .welcome-trust,body.dark .welcome-feature small{color:#c5b9da}
+body.dark .welcome-feature strong{color:#f1eaff}
+body.dark .welcome-bottom{background:#110b1e;color:#e6def3}
+@media(max-width:650px){.sidebar{background:#21143d}}
 </style>
 </head>
 <body>
