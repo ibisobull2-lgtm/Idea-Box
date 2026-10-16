@@ -184,7 +184,7 @@ app.post("/api/savings-goals",auth,async(req,res,next)=>{
     const title=text(req.body.title,120),target=req.body.target_amount,current=req.body.current_amount??0,date=text(req.body.target_date,10);
     if(!title)return res.status(400).json({error:"Savings goal title is required."});
     if(!positive(target)||!nonnegative(current))return res.status(400).json({error:"Target must be positive and current savings cannot be negative."});
-    if(date&&!/^\\d{4}-\\d{2}-\\d{2}$/.test(date))return res.status(400).json({error:"Target date must use YYYY-MM-DD."});
+    if(date&&!/^\d{4}-\d{2}-\d{2}$/.test(date))return res.status(400).json({error:"Target date must use YYYY-MM-DD."});
     const r=await pool.query("INSERT INTO savings_goals(user_id,title,target_amount,current_amount,target_date) VALUES($1,$2,$3,$4,$5::date) RETURNING id,title,target_amount,current_amount,target_date,created_at",[req.userId,title,target,current,date||null]);
     const g=r.rows[0];res.status(201).json({goal:{...g,target_amount:Number(g.target_amount),current_amount:Number(g.current_amount),remaining:Math.max(0,Number(g.target_amount)-Number(g.current_amount)),progress:Math.min(100,Math.round(Number(g.current_amount)/Number(g.target_amount)*10000)/100)}});
   }catch(e){next(e);}
@@ -196,7 +196,7 @@ app.patch("/api/savings-goals/:id",auth,async(req,res,next)=>{
     if(b.current_amount!==undefined&&!nonnegative(b.current_amount))return res.status(400).json({error:"Current amount cannot be negative."});
     if(b.title!==undefined&&!text(b.title,120))return res.status(400).json({error:"Goal title cannot be empty."});
     const date=b.target_date===undefined?null:(b.target_date===""?null:text(b.target_date,10));
-    if(date&&!/^\\d{4}-\\d{2}-\\d{2}$/.test(date))return res.status(400).json({error:"Target date must use YYYY-MM-DD."});
+    if(date&&!/^\d{4}-\d{2}-\d{2}$/.test(date))return res.status(400).json({error:"Target date must use YYYY-MM-DD."});
     const r=await pool.query("UPDATE savings_goals SET title=COALESCE($3,title),target_amount=COALESCE($4,target_amount),current_amount=COALESCE($5,current_amount),target_date=CASE WHEN $6 THEN $7::date ELSE target_date END WHERE id=$1 AND user_id=$2 RETURNING id,title,target_amount,current_amount,target_date,created_at",[req.params.id,req.userId,b.title===undefined?null:text(b.title,120),b.target_amount??null,b.current_amount??null,b.target_date!==undefined,date]);
     if(!r.rowCount)return res.status(404).json({error:"Savings goal not found."});
     const g=r.rows[0];res.json({goal:{...g,target_amount:Number(g.target_amount),current_amount:Number(g.current_amount),remaining:Math.max(0,Number(g.target_amount)-Number(g.current_amount)),progress:Math.min(100,Math.round(Number(g.current_amount)/Number(g.target_amount)*10000)/100)}});
