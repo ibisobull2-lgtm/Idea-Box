@@ -38,6 +38,8 @@ async function initDb() {
   await pool.query("CREATE INDEX IF NOT EXISTS transactions_user_date_idx ON transactions(user_id,transaction_date DESC)");
   await pool.query("CREATE TABLE IF NOT EXISTS business_ideas (id BIGSERIAL PRIMARY KEY,user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,title TEXT NOT NULL,industry TEXT NOT NULL DEFAULT '',customer TEXT NOT NULL DEFAULT '',problem TEXT NOT NULL DEFAULT '',solution TEXT NOT NULL DEFAULT '',startup_cost NUMERIC(14,2) NOT NULL DEFAULT 0 CHECK(startup_cost>=0),expected_monthly_revenue NUMERIC(14,2) NOT NULL DEFAULT 0 CHECK(expected_monthly_revenue>=0),expected_monthly_cost NUMERIC(14,2) NOT NULL DEFAULT 0 CHECK(expected_monthly_cost>=0),notes TEXT NOT NULL DEFAULT '',created_at TIMESTAMPTZ NOT NULL DEFAULT NOW())");
   await pool.query("CREATE TABLE IF NOT EXISTS forecasts (id BIGSERIAL PRIMARY KEY,user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,title TEXT NOT NULL,starting_balance NUMERIC(14,2) NOT NULL DEFAULT 0,monthly_income NUMERIC(14,2) NOT NULL DEFAULT 0,monthly_expenses NUMERIC(14,2) NOT NULL DEFAULT 0,months INTEGER NOT NULL CHECK(months BETWEEN 1 AND 60),projection JSONB NOT NULL,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW())");
+  await pool.query("CREATE TABLE IF NOT EXISTS budgets (id BIGSERIAL PRIMARY KEY,user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,category TEXT NOT NULL,amount NUMERIC(14,2) NOT NULL CHECK(amount>0),period TEXT NOT NULL DEFAULT 'monthly' CHECK(period IN ('weekly','monthly','yearly')),created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),UNIQUE(user_id,category,period))");
+  await pool.query("CREATE TABLE IF NOT EXISTS savings_goals (id BIGSERIAL PRIMARY KEY,user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,title TEXT NOT NULL,target_amount NUMERIC(14,2) NOT NULL CHECK(target_amount>0),current_amount NUMERIC(14,2) NOT NULL DEFAULT 0 CHECK(current_amount>=0),target_date DATE,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW())");
 }
 const text = (v, max=300) => typeof v === "string" ? v.trim().slice(0,max) : "";
 const number = v => (typeof v === "number" || (typeof v === "string" && v.trim() !== "")) ? Number(v) : NaN;
@@ -142,6 +144,68 @@ app.get("/api/forecasts",auth,async(req,res,next)=>{
 app.delete("/api/forecasts/:id",auth,async(req,res,next)=>{
   try{const r=await pool.query("DELETE FROM forecasts WHERE id=$1 AND user_id=$2 RETURNING id",[req.params.id,req.userId]);if(!r.rowCount)return res.status(404).json({error:"Forecast not found."});res.json({deleted:true});}catch(e){next(e);}
 });
+
+app.get("/api/budgets",auth,async(req,res,next)=>{
+  try {
+    const r=await pool.query("SELECT b.id,b.category,b.amount,b.period,b.created_at,COALESCE(SUM(t.amount) FILTER(WHERE t.kind='expense' AND t.category=b.category AND date_trunc(CASE WHEN b.period='weekly' THEN 'week' ELSE 'month' END,t.transaction_date::timestamp)=date_trunc(CASE WHEN b.period='weekly' THEN 'week' ELSE 'month' END,CURRENT_DATE::timestamp)),0) AS spent FROM budgets b LEFT JOIN transactions t ON t.user_id=b.user_id WHERE b.user_id=$1 GROUP BY b.id ORDER BY b.category",[req.userId]);
+    res.json({budgets:r.rows.map(b=>({...b,amount:Number(b.amount),spent:Number(b.spent),remaining:Number(b.amount)-Number(b.spent)}))});
+  } catch(e){next(e);}
+});
+app.post("/api/budgets",auth,async(req,res,next)=>{
+  try {
+    const category=text(req.body.category,80),amount=req.body.amount,period=req.body.period||"monthly";
+    if(!category)return res.status(400).json({error:"Budget category is required."});
+    if(!positive(amount))return res.status(400).json({error:"Budget amount must be positive."});
+    if(!["weekly","monthly","yearly"].includes(period))return res.status(400).json({error:"period must be weekly, monthly, or yearly."});
+    const r=await pool.query("INSERT INTO budgets(user_id,category,amount,period) VALUES($1,$2,$3,$4) ON CONFLICT(user_id,category,period) DO UPDATE SET amount=EXCLUDED.amount RETURNING id,category,amount,period,created_at",[req.userId,category,amount,period]);
+    res.status(201).json({budget:r.rows[0]});
+  } catch(e){next(e);}
+});
+app.patch("/api/budgets/:id",auth,async(req,res,next)=>{
+  try {
+    const b=req.body;
+    if(b.amount!==undefined&&!positive(b.amount))return res.status(400).json({error:"Budget amount must be positive."});
+    if(b.category!==undefined&&!text(b.category,80))return res.status(400).json({error:"Category cannot be empty."});
+    if(b.period!==undefined&&!["weekly","monthly","yearly"].includes(b.period))return res.status(400).json({error:"Invalid budget period."});
+    const r=await pool.query("UPDATE budgets SET category=COALESCE($3,category),amount=COALESCE($4,amount),period=COALESCE($5,period) WHERE id=$1 AND user_id=$2 RETURNING id,category,amount,period,created_at",[req.params.id,req.userId,b.category===undefined?null:text(b.category,80),b.amount??null,b.period??null]);
+    if(!r.rowCount)return res.status(404).json({error:"Budget not found."});
+    res.json({budget:r.rows[0]});
+  } catch(e){if(e.code==="23505")return res.status(409).json({error:"A budget for that category and period already exists."});next(e);}
+});
+app.delete("/api/budgets/:id",auth,async(req,res,next)=>{
+  try{const r=await pool.query("DELETE FROM budgets WHERE id=$1 AND user_id=$2 RETURNING id",[req.params.id,req.userId]);if(!r.rowCount)return res.status(404).json({error:"Budget not found."});res.json({deleted:true});}catch(e){next(e);}
+});
+
+app.get("/api/savings-goals",auth,async(req,res,next)=>{
+  try{const r=await pool.query("SELECT id,title,target_amount,current_amount,target_date,created_at FROM savings_goals WHERE user_id=$1 ORDER BY created_at DESC",[req.userId]);res.json({goals:r.rows.map(g=>({...g,target_amount:Number(g.target_amount),current_amount:Number(g.current_amount),remaining:Math.max(0,Number(g.target_amount)-Number(g.current_amount)),progress:Math.min(100,Math.round(Number(g.current_amount)/Number(g.target_amount)*10000)/100)}))});}catch(e){next(e);}
+});
+app.post("/api/savings-goals",auth,async(req,res,next)=>{
+  try{
+    const title=text(req.body.title,120),target=req.body.target_amount,current=req.body.current_amount??0,date=text(req.body.target_date,10);
+    if(!title)return res.status(400).json({error:"Savings goal title is required."});
+    if(!positive(target)||!nonnegative(current))return res.status(400).json({error:"Target must be positive and current savings cannot be negative."});
+    if(date&&!/^\\d{4}-\\d{2}-\\d{2}$/.test(date))return res.status(400).json({error:"Target date must use YYYY-MM-DD."});
+    const r=await pool.query("INSERT INTO savings_goals(user_id,title,target_amount,current_amount,target_date) VALUES($1,$2,$3,$4,$5::date) RETURNING id,title,target_amount,current_amount,target_date,created_at",[req.userId,title,target,current,date||null]);
+    const g=r.rows[0];res.status(201).json({goal:{...g,target_amount:Number(g.target_amount),current_amount:Number(g.current_amount),remaining:Math.max(0,Number(g.target_amount)-Number(g.current_amount)),progress:Math.min(100,Math.round(Number(g.current_amount)/Number(g.target_amount)*10000)/100)}});
+  }catch(e){next(e);}
+});
+app.patch("/api/savings-goals/:id",auth,async(req,res,next)=>{
+  try{
+    const b=req.body;
+    if(b.target_amount!==undefined&&!positive(b.target_amount))return res.status(400).json({error:"Target amount must be positive."});
+    if(b.current_amount!==undefined&&!nonnegative(b.current_amount))return res.status(400).json({error:"Current amount cannot be negative."});
+    if(b.title!==undefined&&!text(b.title,120))return res.status(400).json({error:"Goal title cannot be empty."});
+    const date=b.target_date===undefined?null:(b.target_date===""?null:text(b.target_date,10));
+    if(date&&!/^\\d{4}-\\d{2}-\\d{2}$/.test(date))return res.status(400).json({error:"Target date must use YYYY-MM-DD."});
+    const r=await pool.query("UPDATE savings_goals SET title=COALESCE($3,title),target_amount=COALESCE($4,target_amount),current_amount=COALESCE($5,current_amount),target_date=CASE WHEN $6 THEN $7::date ELSE target_date END WHERE id=$1 AND user_id=$2 RETURNING id,title,target_amount,current_amount,target_date,created_at",[req.params.id,req.userId,b.title===undefined?null:text(b.title,120),b.target_amount??null,b.current_amount??null,b.target_date!==undefined,date]);
+    if(!r.rowCount)return res.status(404).json({error:"Savings goal not found."});
+    const g=r.rows[0];res.json({goal:{...g,target_amount:Number(g.target_amount),current_amount:Number(g.current_amount),remaining:Math.max(0,Number(g.target_amount)-Number(g.current_amount)),progress:Math.min(100,Math.round(Number(g.current_amount)/Number(g.target_amount)*10000)/100)}});
+  }catch(e){next(e);}
+});
+app.delete("/api/savings-goals/:id",auth,async(req,res,next)=>{
+  try{const r=await pool.query("DELETE FROM savings_goals WHERE id=$1 AND user_id=$2 RETURNING id",[req.params.id,req.userId]);if(!r.rowCount)return res.status(404).json({error:"Savings goal not found."});res.json({deleted:true});}catch(e){next(e);}
+});
+
 app.use((req,res)=>res.status(404).json({error:"API route not found."}));
 app.use((err,req,res,next)=>{
   console.error("API error:",err.message);
