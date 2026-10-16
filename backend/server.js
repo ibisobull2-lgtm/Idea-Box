@@ -147,7 +147,7 @@ app.delete("/api/forecasts/:id",auth,async(req,res,next)=>{
 
 app.get("/api/budgets",auth,async(req,res,next)=>{
   try {
-    const r=await pool.query("SELECT b.id,b.category,b.amount,b.period,b.created_at,COALESCE(SUM(t.amount) FILTER(WHERE t.kind='expense' AND t.category=b.category AND date_trunc(CASE WHEN b.period='weekly' THEN 'week' ELSE 'month' END,t.transaction_date::timestamp)=date_trunc(CASE WHEN b.period='weekly' THEN 'week' ELSE 'month' END,CURRENT_DATE::timestamp)),0) AS spent FROM budgets b LEFT JOIN transactions t ON t.user_id=b.user_id WHERE b.user_id=$1 GROUP BY b.id ORDER BY b.category",[req.userId]);
+    const r=await pool.query("SELECT b.id,b.category,b.amount,b.period,b.created_at,COALESCE(SUM(t.amount) FILTER(WHERE t.kind='expense' AND t.category=b.category AND date_trunc(CASE WHEN b.period='weekly' THEN 'week' WHEN b.period='yearly' THEN 'year' ELSE 'month' END,t.transaction_date::timestamp)=date_trunc(CASE WHEN b.period='weekly' THEN 'week' WHEN b.period='yearly' THEN 'year' ELSE 'month' END,CURRENT_DATE::timestamp)),0) AS spent FROM budgets b LEFT JOIN transactions t ON t.user_id=b.user_id WHERE b.user_id=$1 GROUP BY b.id ORDER BY b.category",[req.userId]);
     res.json({budgets:r.rows.map(b=>({...b,amount:Number(b.amount),spent:Number(b.spent),remaining:Number(b.amount)-Number(b.spent)}))});
   } catch(e){next(e);}
 });
