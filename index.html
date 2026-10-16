@@ -45,6 +45,35 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-se
 .welcome-bottom{background:#101c3a;color:#dbe6ef;border-top:0;padding:19px clamp(20px,5vw,76px);font-size:11px}.welcome-bottom span:last-child{color:#8cebd0}
 @media(max-width:900px){.welcome-hero{grid-template-columns:1fr;padding-top:42px;gap:25px}.welcome-copy{max-width:760px}.welcome-product{max-width:760px;width:100%;margin:auto}.product-window{transform:none}.welcome-feature-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}.product-body{min-height:300px}}
 @media(max-width:560px){.welcome-nav{padding:14px 16px}.welcome-hero{padding:32px 17px 42px}.welcome-copy h1{font-size:39px;letter-spacing:-1.4px}.welcome-copy>p{font-size:14px}.welcome-feature-list{grid-template-columns:1fr}.welcome-actions .btn{width:100%}.product-body{grid-template-columns:86px minmax(0,1fr)}.product-menu{font-size:8px;padding:12px 5px}.product-menu span{padding:8px 4px}.product-dash{padding:13px 9px}.product-stats{gap:6px}.product-stats>div,.product-chart-card,.product-goals{padding:8px}.product-lower{grid-template-columns:1fr}.product-chart-card{display:none}.product-greeting{font-size:14px}.product-note{right:3px}.welcome-bottom{gap:8px;flex-direction:column}}
+
+/* Bring the actual MoneyMind workspace in line with the advert */
+:root{--navy:#0d2140;--navy2:#173858;--green:#20b879;--green2:#dcf8eb;--bg:#f5f9f7;--ink:#142746;--muted:#748198;--line:#e4ece8;--white:#fff;--shadow:0 12px 32px rgba(20,55,50,.06)}
+body{background:#f5f9f7;color:#142746}
+.sidebar{background:#0d2140}
+.logo{background:#d9fff0;color:#078956}
+.brand span em{color:#35d49a}
+.nav button.active,.nav button:hover{background:#203a60;color:#fff}
+.side-note{background:#142b4c;border-color:#29415e}
+.topbar{background:#fff;border-bottom-color:#e4ece8}
+.quote-banner{background:linear-gradient(100deg,#0d2140,#17415a)}
+.content{max-width:1390px;padding-top:31px}
+.welcome h1{color:#102344}
+.card,.feature{border-color:#e4ece8;box-shadow:0 10px 28px rgba(19,54,47,.055);border-radius:17px}
+.stat-icon{background:#e1f8ed;color:#087c54}
+.btn.green{background:#0a9c61;color:#fff}
+.btn.green:hover{background:#078452}
+.btn:not(.green):not(.outline){background:#102344}
+.fill{background:#20b879}
+.tx-icon{background:#eaf7f1;color:#087c54}
+.chart{background:repeating-linear-gradient(to bottom,transparent 0,transparent 46px,#edf2ef 47px,#edf2ef 48px)}
+.bar.income{background:#20b879}
+.bar.expense{background:#d7e4df}
+.feature .big{color:#139a65}
+body.dark{--navy:#080e1c;--bg:#0b1222;--ink:#eef2ff;--muted:#a0acc5;--line:#2a3550;--white:#17223a}
+body.dark .logo{background:#d9fff0;color:#078956}
+body.dark .card,body.dark .feature{background:var(--white);border-color:var(--line)}
+body.dark .stat-icon,body.dark .tx-icon{background:#20364a;color:#a6f4d9}
+@media(max-width:650px){.sidebar{background:#0d2140}.nav button.active,.nav button:hover{background:#203a60}}
 </style>
 </head>
 <body>
