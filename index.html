@@ -75,18 +75,22 @@ body.dark .card,body.dark .feature{background:var(--white);border-color:var(--li
 body.dark .stat-icon,body.dark .tx-icon{background:#20364a;color:#a6f4d9}
 @media(max-width:650px){.sidebar{background:#0d2140}.nav button.active,.nav button:hover{background:#203a60}}
 
-/* User-selected palette: light blue light mode and dark purple dark mode */
+/* Refined palette: soft indigo dark mode and adaptive navigation */
 body{background:#edf6ff;color:#1c3153}
-.sidebar{background:#34205d}
-.brand span em{color:#6bdbbd}
-.logo{background:#e2f1ff;color:#4a6fa9}
+.sidebar{background:#edf6ff;color:#29466c;border-right:1px solid #d9e8f8}
+.sidebar .brand{color:#1c3153}
+.sidebar .brand span em{color:#268dca}
+.sidebar .logo{background:#d9eaff;color:#3568a6}
+.nav-label{color:#7185a2}
+.nav button{color:#526987}
+.nav button.active,.nav button:hover{background:#d9eaff;color:#234c83}
+.side-note{background:#fff;border-color:#d9e8f8;color:#526987}
+.side-note strong{color:#1c3153}
 .topbar{background:#fff;border-bottom-color:#d9e8f8}
 .card,.feature{border-color:#d9e8f8}
-.nav button.active,.nav button:hover{background:#503780;color:#fff}
-.side-note{background:#3e2868;border-color:#5a4380}
-.quote-banner{background:linear-gradient(100deg,#34205d,#503780)}
-.stat-icon{background:#e1f0ff;color:#3568a6}
-.btn.green{background:#20a97d;color:#fff}
+.quote-banner{background:linear-gradient(100deg,#dcecff,#c9e2ff);color:#1c3153}
+.stat-icon{background:#d9eaff;color:#3568a6}
+.btn.green{background:#268dca;color:#fff}
 .fill{background:#45a7e8}
 .feature .big{color:#477fca}
 .welcome-screen{background:#edf6ff;color:#1c3153}
@@ -94,25 +98,30 @@ body{background:#edf6ff;color:#1c3153}
 .welcome-copy h1{color:#1c3153}
 .welcome-copy h1 span{color:#268dca}
 .welcome-kicker{color:#2676a8}
-.welcome-bottom{background:#34205d;color:#e6e0f5}
-body.dark{--navy:#21143d;--navy2:#322052;--bg:#171026;--ink:#f1eaff;--muted:#b9abcF;--line:#3e2d59;--white:#25183d;--shadow:0 12px 34px rgba(0,0,0,.28);background:#171026;color:#f1eaff}
-body.dark .sidebar{background:#21143d}
-body.dark .topbar,body.dark .card,body.dark .feature{background:#25183d;color:#f1eaff;border-color:#3e2d59}
-body.dark .nav button{color:#d0c2e8}
-body.dark .nav button.active,body.dark .nav button:hover{background:#49316c;color:#fff}
-body.dark .side-note{background:#2d1d49;border-color:#49316c}
-body.dark .quote-banner{background:linear-gradient(100deg,#21143d,#3a245b)}
-body.dark .stat-icon,body.dark .tx-icon{background:#392653;color:#c4a8ff}
-body.dark .select,body.dark .field input,body.dark .field select,body.dark .field textarea,body.dark .btn.outline{background:#211633;color:#f1eaff;border-color:#49365f}
-body.dark .welcome-screen{background:#171026;color:#f1eaff}
-body.dark .welcome-backdrop{background-image:radial-gradient(ellipse at 76% 32%,rgba(133,87,205,.18),transparent 42%),linear-gradient(115deg,#1a112b 0%,#211538 58%,#2b1b43 100%)}
-body.dark .welcome-nav{border-bottom-color:#3e2d59}
-body.dark .welcome-nav .brand,body.dark .welcome-copy h1{color:#f1eaff}
-body.dark .welcome-copy h1 span{color:#bd9aff}
-body.dark .welcome-copy>p,body.dark .welcome-trust,body.dark .welcome-feature small{color:#c5b9da}
-body.dark .welcome-feature strong{color:#f1eaff}
-body.dark .welcome-bottom{background:#110b1e;color:#e6def3}
-@media(max-width:650px){.sidebar{background:#21143d}}
+.welcome-bottom{background:#243b68;color:#e6f1ff}
+body.dark{--navy:#211a35;--navy2:#30264a;--bg:#171522;--ink:#f2effa;--muted:#b7b0ca;--line:#3a334c;--white:#242033;--shadow:0 12px 34px rgba(0,0,0,.28);background:#171522;color:#f2effa}
+body.dark .sidebar{background:#211a35;color:#f2effa;border-right-color:#3a334c}
+body.dark .sidebar .brand{color:#f2effa}
+body.dark .sidebar .brand span em{color:#a99ad9}
+body.dark .sidebar .logo{background:#3b3154;color:#d4c9f3}
+body.dark .nav-label{color:#a8a0bf}
+body.dark .nav button{color:#c7c0dc}
+body.dark .nav button.active,body.dark .nav button:hover{background:#3b3154;color:#fff}
+body.dark .side-note{background:#2b243d;border-color:#453a5b;color:#c7c0dc}
+body.dark .side-note strong{color:#f2effa}
+body.dark .topbar,body.dark .card,body.dark .feature{background:#242033;color:#f2effa;border-color:#3a334c}
+body.dark .quote-banner{background:linear-gradient(100deg,#2a223d,#3a3052);color:#f2effa}
+body.dark .stat-icon,body.dark .tx-icon{background:#3b3154;color:#cfc2f4}
+body.dark .select,body.dark .field input,body.dark .field select,body.dark .field textarea,body.dark .btn.outline{background:#211c31;color:#f2effa;border-color:#453a5b}
+body.dark .welcome-screen{background:#171522;color:#f2effa}
+body.dark .welcome-backdrop{background-image:radial-gradient(ellipse at 76% 32%,rgba(140,123,190,.14),transparent 42%),linear-gradient(115deg,#1b1928 0%,#242033 58%,#2d2740 100%)}
+body.dark .welcome-nav{border-bottom-color:#3a334c}
+body.dark .welcome-nav .brand,body.dark .welcome-copy h1{color:#f2effa}
+body.dark .welcome-copy h1 span{color:#b7a9e4}
+body.dark .welcome-copy>p,body.dark .welcome-trust,body.dark .welcome-feature small{color:#c7c0d7}
+body.dark .welcome-feature strong{color:#f2effa}
+body.dark .welcome-bottom{background:#13111d;color:#e7e1f5}
+@media(max-width:650px){.sidebar{background:#edf6ff;color:#29466c;border-right-color:#d9e8f8}body.dark .sidebar{background:#211a35;color:#f2effa;border-right-color:#3a334c}}
 </style>
 </head>
 <body>
